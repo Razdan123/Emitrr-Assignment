@@ -1,16 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const QuizComponent = ({ onEndQuiz }) => {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [question, setQuestion] = useState(null);
+
+  useEffect(() => {
+    // Fetch the initial question when the component mounts
+    fetchQuestion();
+  }, []);
+
+  const fetchQuestion = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/exercise/question');
+      const data = await response.json();
+      setQuestion(data.question);
+    } catch (error) {
+      console.error('Error fetching question:', error);
+    }
+  };
 
   const handleAnswerChange = (option) => {
     setSelectedAnswer(option);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // Handle the submission of the selected answer
     console.log('Selected Answer:', selectedAnswer);
+
     // You can implement your logic to check if the answer is correct and handle marks
+
+    // Fetch the next question after submitting an answer
+    await fetchQuestion();
   };
 
   const handleEndQuiz = () => {
@@ -22,71 +42,38 @@ const QuizComponent = ({ onEndQuiz }) => {
   return (
     <div className="container" style={{ width: '60%', margin: '5% auto', backgroundColor: '#f5f5f5', padding: '20px', borderRadius: '10px' }}>
       <h2 className="mb-4">Quiz Question</h2>
-      <form>
-        <div className="mb-3">
-          <p className="lead">You _____ drink and drive.</p>
-          <div className="form-check">
-            <input
-              type="radio"
-              className="form-check-input"
-              id="optionMay"
-              value="May"
-              checked={selectedAnswer === 'May'}
-              onChange={() => handleAnswerChange('May')}
-            />
-            <label className="form-check-label" htmlFor="optionMay">
-              May
-            </label>
+      {question && (
+        <form>
+          <div className="mb-3">
+            <p className="lead">
+              {question.Question} (Level {question.Level})
+            </p>
+            {['Op1', 'Op2', 'Op3', 'Op4'].map((option, index) => (
+              <div className="form-check" key={index}>
+                <input
+                  type="radio"
+                  className="form-check-input"
+                  id={`option${index}`}
+                  value={question[option]}
+                  checked={selectedAnswer === question[option]}
+                  onChange={() => handleAnswerChange(question[option])}
+                />
+                <label className="form-check-label" htmlFor={`option${index}`}>
+                  {question[option]}
+                </label>
+              </div>
+            ))}
           </div>
-          <div className="form-check">
-            <input
-              type="radio"
-              className="form-check-input"
-              id="optionRome"
-              value="Must"
-              checked={selectedAnswer === 'Must'}
-              onChange={() => handleAnswerChange('Must')}
-            />
-            <label className="form-check-label" htmlFor="optionRome">
-              Must
-            </label>
+          <div className="mb-3">
+            <button type="button" className="btn btn-primary mr-2" onClick={handleSubmit}>
+              Submit
+            </button>
+            <button type="button" className="btn btn-danger" onClick={handleEndQuiz} style={{ marginLeft: '10px' }}>
+              End Quiz
+            </button>
           </div>
-          <div className="form-check">
-            <input
-              type="radio"
-              className="form-check-input"
-              id="optionRome"
-              value="Rome"
-              checked={selectedAnswer === 'Rome'}
-              onChange={() => handleAnswerChange('Rome')}
-            />
-            <label className="form-check-label" htmlFor="optionRome">
-              May not
-            </label>
-          </div>
-          <div className="form-check">
-            <input
-              type="radio"
-              className="form-check-input"
-              id="optionRome"
-              value="Rome"
-              checked={selectedAnswer === 'Rome'}
-              onChange={() => handleAnswerChange('Rome')}
-            />
-            <label className="form-check-label" htmlFor="optionRome">
-              Must not
-            </label>
-          </div>
-        </div>
-        <div className="mb-3">
-          <button type="button" className="btn btn-primary mr-2" onClick={handleSubmit}>
-            Submit
-          </button>
-          <button type="button" className="btn btn-danger" onClick={handleEndQuiz}  style={{ marginLeft: '10px' }}>
-            End Quiz
-          </button>
-        </div>
-      </form>
+        </form>
+      )}
     </div>
   );
 };

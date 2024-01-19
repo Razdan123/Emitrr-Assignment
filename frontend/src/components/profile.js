@@ -1,11 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const ProfileComponent = () => {
+  const [score, setScore] = useState(45); // Assuming the initial score is 45
+
   const profileData = {
     phoneNumber: '+91 8858246621',
     name: 'Rohit Razdan',
     emailId: 'razadnrohit73@gmail.com',
     isPhVerified: true,
+    score: score,
+  };
+
+  const handleResetScore = () => {
+    // Implement your logic to reset the score, for now, I'm setting it to 0
+    setScore(0);
   };
 
   return (
@@ -41,6 +49,21 @@ const ProfileComponent = () => {
         </div>
         <div className="col-md-9">
           <p>{profileData.isPhVerified ? 'Yes' : 'No'}</p>
+        </div>
+      </div>
+      <div className="row mb-3">
+        <div className="col-md-3">
+          <label className="form-label text-muted">My Score</label>
+        </div>
+        <div className="col-md-9">
+          <p>{profileData.score}</p>
+        </div>
+      </div>
+      <div className="row mb-3">
+        <div className="col-md-12 text-center">
+          <button type="button" className="btn btn-danger" onClick={handleResetScore}>
+            Reset Score
+          </button>
         </div>
       </div>
     </div>
