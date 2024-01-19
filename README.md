@@ -4,7 +4,7 @@
 ### Backend
 
 - you have to enter the backend folder by typing `cd backend` in the terminal
-- In the project directory,Install libraries by typing `yarn`
+- In the project directory,Install libraries by typing `npm i`
 - Open a new file named .env
 
 ```environment
