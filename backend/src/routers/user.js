@@ -54,6 +54,45 @@ UserRouter.post("/register", async (req, res) => {
     }
   });
 
+  UserRouter.post('/login', async (req, res) => {
+    try {
+      const { email, password } = req.body;
+  
+      if (!email || !password) {
+        return res.status(400).json({ message: 'Fill all the fields' });
+      }
+  
+      const user = await User.findOne({ email });
+  
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      const isPasswordMatch = await bcrypt.compare(password, user.password);
+  
+      if (!isPasswordMatch) {
+        return res.status(401).json({ message: 'Invalid credentials' });
+      }
+  
+      // Generate JWT token
+      const token = await createJWTtoken(user);
+  
+      // Return user information and token
+      return res.status(200).json({
+        message: 'Login successful',
+        user: {
+          name: user.name,
+          email: user.email,
+          phoneNumber: user.phoneNumber,
+        },
+        token,
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: 'Server Error, Try again later.' });
+    }
+  });
+
   UserRouter.get('/profile', async (req, res) => {
     try {
       // Extract the JWT token from the request headers

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Register = ({ onRegistration }) => {
+const Register = ({ onRegistration, onLogin }) => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -21,6 +21,11 @@ const Register = ({ onRegistration }) => {
       console.error('Error during registration:', error);
       // Handle error (show an error message, etc.)
     }
+  };
+
+  const handleLoginClick = () => {
+    // Call the onLogin callback when the 'Login' button is clicked
+    onLogin();
   };
 
   return (
@@ -78,6 +83,12 @@ const Register = ({ onRegistration }) => {
           Register
         </button>
       </form>
+      <div className="text-center mt-4">
+        {/* 'Login' button with green color */}
+        <button type="button" className="btn btn-success" onClick={handleLoginClick}>
+          Or Login
+        </button>
+      </div>
     </div>
   );
 };

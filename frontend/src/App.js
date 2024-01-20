@@ -4,6 +4,7 @@ import Quiz from './components/quiz';
 import Profile from './components/profile';
 import LeaderBoard from './components/leaderboard';
 import Register from './components/register';
+import Login from './components/login';
 import './App.css';
 
 function App() {
@@ -29,12 +30,13 @@ function App() {
       });
 
       if (response.ok) {
-      // Parse the response JSON
-      const data = await response.json();
+        // Parse the response JSON
+        const data = await response.json();
 
-      localStorage.setItem('jwtToken', data.token);
-      
-      setActiveComponent('Profile');
+        localStorage.setItem('jwtToken', data.token);
+
+        // Update the active component to 'Profile' after successful registration/login
+        setActiveComponent('Profile');
       } else {
         console.error('Registration failed:', response.statusText);
       }
@@ -43,13 +45,18 @@ function App() {
     }
   };
 
+  const handleLogin = () => {
+    setActiveComponent('Login');
+  };
+
   return (
     <>
       <Navbar onTabClick={handleTabClick} />
       {activeComponent === 'Quiz' && <Quiz />}
       {activeComponent === 'Profile' && <Profile />}
       {activeComponent === 'LeaderBoard' && <LeaderBoard />}
-      {activeComponent === 'Register' && <Register onRegistration={handleRegistration} />}
+      {activeComponent === 'Register' && <Register onRegistration={handleRegistration} onLogin={handleLogin} />}
+      {activeComponent === 'Login' && <Login onLogin={() => setActiveComponent('Profile')} />}
     </>
   );
 }
