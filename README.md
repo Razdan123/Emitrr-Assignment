@@ -1,4 +1,11 @@
 [Language Learning Application]
+
+
+
+https://github.com/Razdan123/Emitrr-Assignment/assets/78309613/c21fe264-a7d5-4afb-bb9f-a8246b64024a
+
+
+
 # Run the Project
 
 ### Backend
