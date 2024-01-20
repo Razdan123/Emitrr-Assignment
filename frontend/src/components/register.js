@@ -15,16 +15,13 @@ const Register = ({ onRegistration, onLogin }) => {
         password,
       };
 
-      // Call the onRegistration callback with user data
       await onRegistration(userData);
     } catch (error) {
       console.error('Error during registration:', error);
-      // Handle error (show an error message, etc.)
     }
   };
 
   const handleLoginClick = () => {
-    // Call the onLogin callback when the 'Login' button is clicked
     onLogin();
   };
 
@@ -84,7 +81,6 @@ const Register = ({ onRegistration, onLogin }) => {
         </button>
       </form>
       <div className="text-center mt-4">
-        {/* 'Login' button with green color */}
         <button type="button" className="btn btn-success" onClick={handleLoginClick}>
           Or Login
         </button>

@@ -7,11 +7,10 @@ const ProfileComponent = () => {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        // Make the API request to fetch user details
         const response = await fetch('http://localhost:5000/api/user/profile', {
           method: 'GET',
           headers: {
-            'x-auth-token': localStorage.getItem('jwtToken'), // Include the JWT token
+            'x-auth-token': localStorage.getItem('jwtToken'),
           },
         });
 
@@ -29,11 +28,9 @@ const ProfileComponent = () => {
     };
 
     fetchUserProfile();
-  }, []); // Empty dependency array ensures the effect runs once when the component mounts
+  }, []); 
 
   const handleResetScore = () => {
-    // Implement your logic to reset the score, for now, I'm setting it to 0
-    // You can make another API call if needed to update the server-side score
     setUserDetails((prevDetails) => ({
       ...prevDetails,
       score: 0,

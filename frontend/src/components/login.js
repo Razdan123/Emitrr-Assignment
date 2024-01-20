@@ -11,7 +11,6 @@ const Login = ({ onLogin }) => {
         password,
       };
 
-      // Make the login API request
       const response = await fetch('http://localhost:5000/api/user/login', {
         method: 'POST',
         headers: {
@@ -21,20 +20,16 @@ const Login = ({ onLogin }) => {
       });
 
       if (response.ok) {
-        // Parse the response JSON
         const data = await response.json();
 
         localStorage.setItem('jwtToken', data.token);
 
-        // Call the onLogin callback with user data
         await onLogin();
       } else {
         console.error('Login failed:', response.statusText);
-        // Handle login failure (show an error message, etc.)
       }
     } catch (error) {
       console.error('Error during login:', error);
-      // Handle error (show an error message, etc.)
     }
   };
 

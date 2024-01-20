@@ -12,7 +12,6 @@ function App() {
 
   const handleTabClick = (tab) => {
     if (activeComponent === 'Register') {
-      // If the user is not registered, prevent switching tabs
       return;
     }
     setActiveComponent(tab);
@@ -20,7 +19,6 @@ function App() {
 
   const handleRegistration = async (userData) => {
     try {
-      // Make the POST request to the registration API
       const response = await fetch('http://localhost:5000/api/user/register', {
         method: 'POST',
         headers: {
@@ -30,12 +28,9 @@ function App() {
       });
 
       if (response.ok) {
-        // Parse the response JSON
         const data = await response.json();
 
         localStorage.setItem('jwtToken', data.token);
-
-        // Update the active component to 'Profile' after successful registration/login
         setActiveComponent('Profile');
       } else {
         console.error('Registration failed:', response.statusText);

@@ -5,7 +5,6 @@ const QuizComponent = ({ onEndQuiz }) => {
   const [question, setQuestion] = useState(null);
 
   useEffect(() => {
-    // Fetch the initial question when the component mounts
     fetchQuestion();
   }, []);
 
@@ -24,17 +23,11 @@ const QuizComponent = ({ onEndQuiz }) => {
   };
 
   const handleSubmit = async () => {
-    // Handle the submission of the selected answer
     console.log('Selected Answer:', selectedAnswer);
-
-    // You can implement your logic to check if the answer is correct and handle marks
-
-    // Fetch the next question after submitting an answer
     await fetchQuestion();
   };
 
   const handleEndQuiz = () => {
-    // Add any cleanup logic or necessary actions before ending the quiz
     setSelectedAnswer(null); // Reset selected answer
     onEndQuiz(); // Trigger the callback to end the quiz
   };

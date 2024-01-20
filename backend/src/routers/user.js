@@ -12,12 +12,10 @@ UserRouter.post("/register", async (req, res) => {
     try {
       const { name, email, phoneNumber, password } = req.body;
   
-      // Credentials validation
       if (!name || !email || !phoneNumber || !password) {
         return res.status(400).json({ message: "Fill all the fields" });
       }
   
-      // Check if the email or phoneNumber is already registered
       const existingUser = await User.findOne({ $or: [{ email }, { phoneNumber }] });
   
       if (existingUser) {
@@ -27,7 +25,6 @@ UserRouter.post("/register", async (req, res) => {
       // Hash the password
       const hashedPassword = await bcrypt.hash(password, 10);
   
-      // Create a new user
       const newUser = new User({
         name,
         email,
@@ -35,7 +32,6 @@ UserRouter.post("/register", async (req, res) => {
         password: hashedPassword,
       });
   
-      // Save the user to the database
       await newUser.save();
   
       // Generate JWT token
@@ -77,7 +73,6 @@ UserRouter.post("/register", async (req, res) => {
       // Generate JWT token
       const token = await createJWTtoken(user);
   
-      // Return user information and token
       return res.status(200).json({
         message: 'Login successful',
         user: {
@@ -95,26 +90,22 @@ UserRouter.post("/register", async (req, res) => {
 
   UserRouter.get('/profile', async (req, res) => {
     try {
-      // Extract the JWT token from the request headers
       const token = req.header('x-auth-token');
   
       if (!token) {
         return res.status(401).json({ message: 'No token, authorization denied' });
       }
   
-      // Verify the token
       const decoded = jwt.verify(token, process.env.TOKEN_SECRET);
 
       console.log(decoded);
   
-      // Use the decoded information to identify the user
       const user = await User.findOne({ email: decoded.email });
   
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
       }
   
-      // Return the user profile details
       const userProfile = {
         name: user.name,
         email: user.email,
