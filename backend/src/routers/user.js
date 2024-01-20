@@ -1,5 +1,6 @@
 const UserRouter = require("express").Router();
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 require("dotenv").config({ path: ".env" });
 
@@ -50,6 +51,41 @@ UserRouter.post("/register", async (req, res) => {
       return res.status(500).json({
         message: "Server Error, Try again later.",
       });
+    }
+  });
+
+  UserRouter.get('/profile', async (req, res) => {
+    try {
+      // Extract the JWT token from the request headers
+      const token = req.header('x-auth-token');
+  
+      if (!token) {
+        return res.status(401).json({ message: 'No token, authorization denied' });
+      }
+  
+      // Verify the token
+      const decoded = jwt.verify(token, process.env.TOKEN_SECRET);
+
+      console.log(decoded);
+  
+      // Use the decoded information to identify the user
+      const user = await User.findOne({ email: decoded.email });
+  
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      // Return the user profile details
+      const userProfile = {
+        name: user.name,
+        email: user.email,
+        phoneNumber: user.phoneNumber
+      };
+  
+      return res.status(200).json({ user: userProfile });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: 'Server Error, Try again later.' });
     }
   });
 

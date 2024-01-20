@@ -15,12 +15,12 @@ const userSchema = new Schema({
     lowercase: true,
     match: [/^\S+@\S+\.\S+$/, 'Please enter a valid email address.'],
   },
-//   phoneNumber: {
-//     type: String,
-//     required: false,
-//     unique: true,
-//     trim: true,
-//   },
+  phoneNumber: {
+    type: String,
+    required: false,
+    unique: true,
+    trim: true,
+  },
 //   isPhVerified: {
 //     type: Boolean,
 //     required: false,
